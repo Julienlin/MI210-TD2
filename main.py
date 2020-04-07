@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import PSpy
 import WhiteningFilterspy
 import ICApy
@@ -8,15 +6,15 @@ import numpy as np
 #defining read and write directories
 
 
-inputFileName = "/put/your/image/database/hdf5File/absolute/path/here/"
-resultsDirectory = "/put/your/results/directory/absolute/path/here/"
+inputFileName = "C:\Users\lucie\Desktop\ENSTA\2A\MI210\TD2\airportSurveillance.hdf5"
+resultsDirectory = "C:\Users\lucie\Desktop\ENSTA\2A\MI210\TD2\Results"
 
 
-#defining images and output file names
-averagePSResultsFileName = resultsDirectory + "averagePS.hdf5"
+#defining images and output file names 
+averagePSResultsFileName = resultsDirectory + "averagePS.hdf5" 
 averagePSFigureFileName = resultsDirectory + "averagePS.png"
 
-averagePSLocalResultsFileName = resultsDirectory + "averagePSLocal.hdf5"
+averagePSLocalResultsFileName = resultsDirectory + "averagePSLocal.hdf5" 
 averagePSLocalFigureFileName = resultsDirectory + "averagePSLocal.png"
 
 whiteningFiltersFigureFileName = resultsDirectory + "whiteningFilters.png"
@@ -40,10 +38,10 @@ numberOfSamplesICA = 50000; #number of samples from the dataset for making ICA
 
 
 ##Question 2
-#averagePS = PSpy.getAveragePS(inputFileName, sampleSize)
+averagePS = PSpy.getAveragePS(inputFileName, sampleSizePS, numberOfSamplesPS)
 
-#PSpy.saveH5(averagePSResultsFileName,'averagePS',averagePS)
-#PSpy.makeAveragePSFigure(averagePS, averagePSFigureFileName)
+PSpy.saveH5(averagePSResultsFileName,'averagePS',averagePS)
+PSpy.makeAveragePSFigure(averagePS, averagePSFigureFileName)
 
 ##Question 3
 #averagePSRadial = PSpy.getRadialPS(averagePS)

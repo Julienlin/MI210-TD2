@@ -15,20 +15,26 @@ def getSampleTopLeftCorner(iMin,iMax,jMin,jMax):
     Returns:
         [i,j] (tuple(int,int)): random integers such iMin<=i<iMax,jMin<=j<jMax,
     """ 
-    ###write your function here
-    print("You should define the function getSampleTopLeftCorner")
+    return (np.random.randint(iMin, high=iMax+1), np.random.randint(jMin, high=jMax+1))
 
 def getSampleImage(image, sampleSize, topLeftCorner):
     """ Function that extracts a sample of an image with a given size and a given position
     Args:
         image (numpy.array) : input image to be sampled
         sampleSize (tuple(int,int)): size of the sample
-        topLeftCorner (tuple(int,int)): positon of the top left corner of the sample within the image
+        topLeftCorner (tuple(int,int)): position of the top left corner of the sample within the image
     Returns:
         sample (numpy.array): image sample
     """ 
     ###write your function here 
-    print("You should define the function getSampleImage")
+    # print("You should define the function getSampleImage")
+    res = np.zeros(sampleSize)
+    for i in range(sampleSize[0]):
+        for j in range(sampleSize[1]):
+            res[topLeftCorner[0]+i][topLeftCorner[1]+j] = image[topLeftCorner[0]+i][topLeftCorner[1]+j]
+    return res
+
+    
 
 def getSamplePS(sample):
     """ Function that calculates the power spectrum of a image sample
@@ -37,20 +43,28 @@ def getSamplePS(sample):
     Returns:
         samplePS (numpy.array): power spectrum of the sample. The axis are shifted such the low frequencies are in the center of the array (see scipy.ffpack.fftshift)
     """ 
-    ###write your function here
-    print("You should define the function getSamplePS")    
+    samplePS =  np.fft(sample)**2
+    np.fft.fftshift(samplePS)
+    return samplePS   
 
 def getAveragePS(inputFileName, sampleSize, numberOfSamples):
-    """ Function that estimates the average power spectrum of a image database
-    Args:
+        """ Function that estimates the average power spectrum of a image database
+    Args : 
         inputFileName (str) : Absolute pathway to the image database stored in the hdf5
         sampleSize (tuple(int,int)): size of the samples that are extrated from the images
         numberOfSamples
     Returns:
         averagePS (numpy.array): average power spectrum of the database samples. The axis are shifted such the low frequencies are in the center of the array (see scipy.ffpack.fftshift)
     """ 
-   ###write your function here
-   print("You should define the function getAveragePS")
+    buf = readH5(inputFileName, images)
+    res = np.zeros(numberOfSamples)
+    for i in range(numberOfSamples)
+        topLeftCorner = getSampleTopLeftCorner(0+31*i,31+31*i,0+31*i,31+31*i)
+        sample = getSampleImage(buf, sampleSize, topLeftCorner)
+        getSamplePS(sample)
+    
+    return average
+
    
 def getRadialFreq(PSSize):
     """ Function that returns the Discrete Fourier Transform radial frequencies

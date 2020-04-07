@@ -39,7 +39,6 @@ numberOfSamplesICA = 50000   # number of samples from the dataset for making ICA
 
 ## Question 2
 
-print("COUCOU, " + inputFileName)
 averagePS = PSpy.getAveragePS(inputFileName, sampleSizePS, numberOfSamplesPS)
 
 PSpy.saveH5(averagePSResultsFileName, 'averagePS', averagePS)

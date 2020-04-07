@@ -78,11 +78,12 @@ def getRadialFreq(PSSize):
     Returns:
         radialFreq (numpy.array): radial frequencies in crescent order
     """
-    fx = np.fft.fftshift(np.fft.fftfreq(PSSize[0], 1./PSSize[0]));
-    fy = np.fft.fftshift(np.fft.fftfreq(PSSize[1], 1./PSSize[1]));
-    [X,Y] = np.meshgrid(fx,fy);
-    R = np.sqrt(X**2+Y**2);
+    fx = np.fft.fftshift(np.fft.fftfreq(PSSize[0], 1./PSSize[0]))
+    fy = np.fft.fftshift(np.fft.fftfreq(PSSize[1], 1./PSSize[1]))
+    [X, Y] = np.meshgrid(fx, fy)
+    R = np.sqrt(X**2+Y**2)
     return R
+
 
 def getRadialPS(averagePS):
     """ Function that estimates the average power radial spectrum of a image database
@@ -113,12 +114,13 @@ def makeAveragePSFigure(averagePS, figureFileName):
         averagePSLocal (numpy.array): the average power spectrum in an array of shape [sampleShape[0],sampleShape[1]
         figureFileName (str): absolute path where the figure will be saved
     """
-    pylab.imshow(np.log(averagePS),cmap = "gray")
+    pylab.imshow(np.log(averagePS), cmap="gray")
     pylab.contour(np.log(averagePS))
     pylab.axis("off")
     pylab.savefig(figureFileName)
 
-def makeAveragePSRadialFigure(radialFreq,averagePSRadial,figureFileName):
+
+def makeAveragePSRadialFigure(radialFreq, averagePSRadial, figureFileName):
     """ Function that makes and save the figure with the power spectrum
     Args:
         averagePS (numpy.array) : the average power spectrum
@@ -126,13 +128,13 @@ def makeAveragePSRadialFigure(radialFreq,averagePSRadial,figureFileName):
         figureFileName (str): absolute path where the figure will be saved
     """
     pylab.figure()
-    pylab.loglog(radialFreq,averagePSRadial,'.')
+    pylab.loglog(radialFreq, averagePSRadial, '.')
     pylab.xlabel("Frequecy")
     pylab.ylabel("Radial Power Spectrum")
     pylab.savefig(figureFileName)
 
 
-def makeAveragePSLocalFigure(averagePSLocal,figureFileName,gridSize):
+def makeAveragePSLocalFigure(averagePSLocal, figureFileName, gridSize):
     """ Function that makes and save the figure with the local power spectrum
     Args:
         averagePSLocal (numpy.array): the average power spectrum in an array of shape [gridSize[0],gridSize[1],sampleShape[0],sampleShape[1]
@@ -142,13 +144,14 @@ def makeAveragePSLocalFigure(averagePSLocal,figureFileName,gridSize):
     pylab.figure()
     for i in range(gridSize[0]):
         for j in range(gridSize[1]):
-            pylab.subplot(gridSize[0],gridSize[1],i*gridSize[1]+j+1)
-            pylab.imshow(np.log(averagePSLocal[i,j]),cmap = "gray")
-            pylab.contour(np.log(averagePSLocal[i,j]))
+            pylab.subplot(gridSize[0], gridSize[1], i*gridSize[1]+j+1)
+            pylab.imshow(np.log(averagePSLocal[i, j]), cmap="gray")
+            pylab.contour(np.log(averagePSLocal[i, j]))
             pylab.axis("off")
     pylab.savefig(figureFileName)
 
-def saveH5(fileName,dataName,numpyArray):
+
+def saveH5(fileName, dataName, numpyArray):
     """ Function that saves numpy arrays in a binary file h5
     Args:
         fileName (str): the path where the numpy array will be saved. The absolute path should be given. It should finish with '.hdf5'
@@ -157,7 +160,7 @@ def saveH5(fileName,dataName,numpyArray):
     """
 
     f = h5py.File(fileName, "w")
-    f.create_dataset(dataName,data =numpyArray);
+    f.create_dataset(dataName, data=numpyArray)
     f.close()
 
 

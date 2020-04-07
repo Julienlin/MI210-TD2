@@ -12,23 +12,23 @@ resultsDirectory = os.path.join(os.getcwd(), "Results")
 
 
 # defining images and output file names
-averagePSResultsFileName = resultsDirectory + "averagePS.hdf5"
-averagePSFigureFileName = resultsDirectory + "averagePS.png"
+averagePSResultsFileName = os.path.join(resultsDirectory, "averagePS.hdf5")
+averagePSFigureFileName = os.path.join(resultsDirectory, "averagePS.png")
 
-averagePSLocalResultsFileName = resultsDirectory + "averagePSLocal.hdf5"
-averagePSLocalFigureFileName = resultsDirectory + "averagePSLocal.png"
+averagePSLocalResultsFileName = os.path.join(resultsDirectory, "averagePSLocal.hdf5")
+averagePSLocalFigureFileName = os.path.join(resultsDirectory, "averagePSLocal.png")
 
-whiteningFiltersFigureFileName = resultsDirectory + "whiteningFilters.png"
-whiteningFiltersResultsFileName = resultsDirectory + "whiteningFilters.hdf5"
+whiteningFiltersFigureFileName = os.path.join(resultsDirectory, "whiteningFilters.png")
+whiteningFiltersResultsFileName = os.path.join(resultsDirectory, "whiteningFilters.hdf5")
 
-ICResultsFileName = resultsDirectory + "IC.hdf5"
-ICFigureFileName = resultsDirectory + "IC.png"
+ICResultsFileName = os.path.join(resultsDirectory, "IC.hdf5")
+ICFigureFileName = os.path.join(resultsDirectory, "IC.png")
 
-ICAActivationsResultsFileName = resultsDirectory + "ActivationsICA.hdf5"
-ICAActivationsSparsenessFigureFileName = resultsDirectory + "ActivationsICA.png"
+ICAActivationsResultsFileName = os.path.join(resultsDirectory, "ActivationsICA.hdf5")
+ICAActivationsSparsenessFigureFileName = os.path.join(resultsDirectory, "ActivationsICA.png")
 
 # Defining some parameters
-sampleSizePS = [32, 32] #image sample size for the power spectrum
+sampleSizePS = [32, 32]  # image sample size for the power spectrum
 gridSize = [3, 3]
 numberOfSamplesPS = 10000  # number of samples from the dataset for estimating PS
 

@@ -52,7 +52,7 @@ def getSamplePS(sample):
 
 
 def getAveragePS(inputFileName, sampleSize, numberOfSamples):
-        """ Function that estimates the average power spectrum of a image database
+    """ Function that estimates the average power spectrum of a image database
     Args :
         inputFileName (str) : Absolute pathway to the image database stored in the hdf5
         sampleSize (tuple(int,int)): size of the samples that are extrated from the images
@@ -63,8 +63,8 @@ def getAveragePS(inputFileName, sampleSize, numberOfSamples):
 
     buf = readH5(inputFileName, images)
     res = np.zeros(numberOfSamples)
-    for i in range(numberOfSamples)
-        topLeftCorner = getSampleTopLeftCorner(0+31*i,31+31*i,0+31*i,31+31*i)
+    for i in range(numberOfSamples):
+        topLeftCorner = getSampleTopLeftCorner(0+31*i, 31+31*i, 0+31*i, 31+31*i)
         sample = getSampleImage(buf, sampleSize, topLeftCorner)
         getSamplePS(sample)
 

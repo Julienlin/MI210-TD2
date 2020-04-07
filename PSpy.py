@@ -46,7 +46,7 @@ def getSamplePS(sample):
         samplePS (numpy.array): power spectrum of the sample. The axis are shifted such the low frequencies are in the center of the array (see scipy.ffpack.fftshift)
     """
 
-    samplePS = np.fft(sample)**2
+    samplePS = np.abs(np.fft.fft(sample))**2
     np.fft.fftshift(samplePS)
     return samplePS
 
@@ -61,12 +61,23 @@ def getAveragePS(inputFileName, sampleSize, numberOfSamples):
         averagePS (numpy.array): average power spectrum of the database samples. The axis are shifted such the low frequencies are in the center of the array (see scipy.ffpack.fftshift)
     """
 
-    buf = readH5(inputFileName, images)
-    res = np.zeros(numberOfSamples)
+    print(inputFileName == "/home/julien/Cours/ENSTA/2A/MI210/Module4/MI210-TD2/airportSurveillance.hdf5")
+    dataSet = h5py.File(inputFileName, 'r')
+    images = (dataSet.get('images'))
+    average = np.zeros(sampleSize)
     for i in range(numberOfSamples):
-        topLeftCorner = getSampleTopLeftCorner(0+31*i, 31+31*i, 0+31*i, 31+31*i)
-        sample = getSampleImage(buf, sampleSize, topLeftCorner)
-        getSamplePS(sample)
+        image = images[i]
+        imageSize = np.shape(image)
+        topLeftCorner = getSampleTopLeftCorner(0, imageSize[0]-sampleSize[0],
+                                               0, imageSize[1]-sampleSize[1])
+        sample = getSampleImage(image, sampleSize, topLeftCorner)
+        samplePS = getSamplePS(sample)
+        for j in range(sampleSize[0]):
+            for k in range(sampleSize[1]):
+                average[j][k] = average[j][k] + samplePS[j][k]/numberOfSamples
+
+    dataSet.close()
+    np.fft.fftshift(average)
 
     return average
 

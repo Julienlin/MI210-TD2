@@ -10,6 +10,8 @@ numpy = "*"
 scipy = "*"
 matplotlib = "*"
 h5py = "*"
+h5pyviewer = "*"
+sklearn = "*"
 
 [requires]
 python_version = "3.8"

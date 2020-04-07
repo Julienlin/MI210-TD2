@@ -26,37 +26,37 @@ ICFigureFileName = resultsDirectory + "IC.png"
 ICAActivationsResultsFileName = resultsDirectory +"ActivationsICA.hdf5"
 ICAActivationsSparsenessFigureFileName = resultsDirectory +"ActivationsICA.png"
 
-#defining some parameters
-sampleSizePS = [32,32] #image sample size for the power spectrum
-gridSize = [3,3]
-numberOfSamplesPS = 10000; #number of samples from the dataset for estimating PS
+# Defining some parameters
+sampleSizePS = [32, 32] #image sample size for the power spectrum
+gridSize = [3, 3]
+numberOfSamplesPS = 10000  # number of samples from the dataset for estimating PS
 
 
+sampleSizeICA = [12, 12]  # image sample size for the ICA
+numberOfSamplesICA = 50000   # number of samples from the dataset for making ICA
 
-sampleSizeICA = [12,12] #image sample size for the ICA
-numberOfSamplesICA = 50000; #number of samples from the dataset for making ICA
 
+## Question 2
 
-##Question 2
 averagePS = PSpy.getAveragePS(inputFileName, sampleSizePS, numberOfSamplesPS)
 
-PSpy.saveH5(averagePSResultsFileName,'averagePS',averagePS)
+PSpy.saveH5(averagePSResultsFileName, 'averagePS', averagePS)
 PSpy.makeAveragePSFigure(averagePS, averagePSFigureFileName)
 
-##Question 3
+## Question 3
 #averagePSRadial = PSpy.getRadialPS(averagePS)
 #radialFreq = PSpy.getRadialFreq(averagePS.shape)
 #PSpy.saveH5(averagePSRadialResultsFileName,'averagePSRadial',averagePSRadial)
 #PSpy.makeAveragePSRadialFigure(np.unique(radialFreq),averagePSRadial, averagePSRadialFigureFileName)
 
-##Question 4
+## Question 4
 #averagePSLocal = PSpy.getAveragePSLocal(inputFileName, sampleSize, gridSize)
 #PSpy.saveH5(averagePSLocalResultsFileName,'averagePS',averagePSLocal)
 #PSpy.makeAveragePSLocalFigure(averagePSLocal, averagePSLocalFigureFileName,gridSize)
 
 
 
-##Question 5
+## Question 5
 #averagePS = PSpy.readH5(averagePSResultsFileName,'averagePS')
 
 #maxPS = np.max(averagePS);
@@ -69,7 +69,7 @@ PSpy.makeAveragePSFigure(averagePS, averagePSFigureFileName)
 #PSpy.saveH5(whiteningFiltersResultsFileName,'whiteningFilters',np.array(whiteningFilters))
 #WhiteningFilterspy.makeWhiteningFiltersFigure(whiteningFilters,whiteningFiltersFigureFileName)
 
-##Question 6
+## Question 6
 
 
 #X = ICApy.getICAInputData(inputFileName, sampleSizeICA, numberOfSamplesICA)
@@ -79,7 +79,7 @@ PSpy.makeAveragePSFigure(averagePS, averagePSFigureFileName)
 #PSpy.saveH5(ICResultsFileName,'IC',W)
 #ICApy.makeIdependentComponentsFigure(W,sampleSizeICA, ICFigureFileName)
 
-##Question 7
+## Question 7
 #A = ICApy.estimateActivations(W)
 #sparsenessMeasure = ICApy.estimateSparseness(A)
 #PSpy.saveH5(ICAActivationsResultsFileName,'A',A)

@@ -30,7 +30,7 @@ ICAActivationsSparsenessFigureFileName = os.path.join(resultsDirectory, "Activat
 # Defining some parameters
 sampleSizePS = [32, 32]  # image sample size for the power spectrum
 gridSize = [3, 3]
-numberOfSamplesPS = 10000  # number of samples from the dataset for estimating PS
+numberOfSamplesPS = 608  # number of samples from the dataset for estimating PS
 
 
 sampleSizeICA = [12, 12]  # image sample size for the ICA

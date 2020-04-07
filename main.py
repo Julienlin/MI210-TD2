@@ -2,29 +2,30 @@ import PSpy
 import WhiteningFilterspy
 import ICApy
 import numpy as np
+import os
 
-#defining read and write directories
-
-
-inputFileName = "C:\Users\lucie\Desktop\ENSTA\2A\MI210\TD2\airportSurveillance.hdf5"
-resultsDirectory = "C:\Users\lucie\Desktop\ENSTA\2A\MI210\TD2\Results"
+# defining read and write directories
 
 
-#defining images and output file names 
-averagePSResultsFileName = resultsDirectory + "averagePS.hdf5" 
+inputFileName = os.getcwd()
+resultsDirectory = os.path.join(os.getcwd(), "Results")
+
+
+# defining images and output file names
+averagePSResultsFileName = resultsDirectory + "averagePS.hdf5"
 averagePSFigureFileName = resultsDirectory + "averagePS.png"
 
-averagePSLocalResultsFileName = resultsDirectory + "averagePSLocal.hdf5" 
+averagePSLocalResultsFileName = resultsDirectory + "averagePSLocal.hdf5"
 averagePSLocalFigureFileName = resultsDirectory + "averagePSLocal.png"
 
 whiteningFiltersFigureFileName = resultsDirectory + "whiteningFilters.png"
 whiteningFiltersResultsFileName = resultsDirectory + "whiteningFilters.hdf5"
 
-ICResultsFileName = resultsDirectory +  "IC.hdf5"
+ICResultsFileName = resultsDirectory + "IC.hdf5"
 ICFigureFileName = resultsDirectory + "IC.png"
 
-ICAActivationsResultsFileName = resultsDirectory +"ActivationsICA.hdf5"
-ICAActivationsSparsenessFigureFileName = resultsDirectory +"ActivationsICA.png"
+ICAActivationsResultsFileName = resultsDirectory + "ActivationsICA.hdf5"
+ICAActivationsSparsenessFigureFileName = resultsDirectory + "ActivationsICA.png"
 
 # Defining some parameters
 sampleSizePS = [32, 32] #image sample size for the power spectrum

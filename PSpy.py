@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.fftpack
+from scipy import ndimage
 import os
 import h5py
 import pylab
@@ -60,22 +61,24 @@ def getAveragePS(inputFileName, sampleSize, numberOfSamples):
     """
 
     dataSet = h5py.File(inputFileName, 'r')
-    images = (dataSet.get('images'))
-    average = np.zeros(sampleSize)
+    images = dataSet.get('images')
+    averagePS = np.zeros(sampleSize)
     for i in range(numberOfSamples):
         image = images[i]
         imageSize = np.shape(image)
-        topLeftCorner = getSampleTopLeftCorner(0, imageSize[0]-sampleSize[0], 0, imageSize[1]-sampleSize[1])
+        topLeftCorner = getSampleTopLeftCorner(
+            0, imageSize[0]-sampleSize[0], 0, imageSize[1]-sampleSize[1])
         sample = getSampleImage(image, sampleSize, topLeftCorner)
         samplePS = getSamplePS(sample)
         for j in range(sampleSize[0]):
             for k in range(sampleSize[1]):
-                average[j][k] = average[j][k] + samplePS[j][k]/numberOfSamples
+                averagePS[j][k] = averagePS[j][k] + \
+                    samplePS[j][k]/numberOfSamples
 
     dataSet.close()
-    np.fft.fftshift(average)
+    averagePS = np.fft.fftshift(averagePS)
 
-    return average
+    return averagePS
 
 
 def getRadialFreq(PSSize):
@@ -85,11 +88,12 @@ def getRadialFreq(PSSize):
     Returns:
         radialFreq (numpy.array): radial frequencies in crescent order
     """
-    fx = np.fft.fftshift(np.fft.fftfreq(PSSize[0], 1./PSSize[0]));
-    fy = np.fft.fftshift(np.fft.fftfreq(PSSize[1], 1./PSSize[1]));
-    [X,Y] = np.meshgrid(fx,fy);
+    fx = np.fft.fftshift(np.fft.fftfreq(PSSize[0], 1./PSSize[0]))
+    fy = np.fft.fftshift(np.fft.fftfreq(PSSize[1], 1./PSSize[1]))
+    [X, Y] = np.meshgrid(fx, fy)
     R = np.sqrt(X**2+Y**2)
     return R
+
 
 def getRadialPS(averagePS):
     """ Function that estimates the average power radial spectrum of a image database
@@ -98,7 +102,20 @@ def getRadialPS(averagePS):
     Returns:
         averagePSRadial (numpy.array): average radial power spectrum of the database samples.
     """
-    print("You should define the function getRadialPS")
+    R = getRadialFreq(averagePS.shape)
+    unique = np.unique(R)
+    averagePSRadial = np.zeros(unique.shape)
+    for r in range(len(unique)):
+        circle_sum = 0
+        num = 0
+        for i in range(averagePS.shape[0]):
+            for j in range(averagePS.shape[1]):
+                if R[i][j] == unique[r]:
+                    circle_sum += averagePS[i][j]
+                    num += 1
+        averagePSRadial[r] = circle_sum / num
+
+    return averagePSRadial
 
 
 def getAveragePSLocal(inputFileName, sampleSize, gridSize):
@@ -110,8 +127,32 @@ def getAveragePSLocal(inputFileName, sampleSize, gridSize):
     Returns:
         averagePSLocal (numpy.array): average power spectrum of the database samples. The axis are shifted such the low frequencies are in the center of the array (see numpy.fft.fftshift)
     """
-    ###write your function here
-    print("You should define the function getAveragePSLocal")
+    dataSet = h5py.File(inputFileName, 'r')
+    images = dataSet.get('images')
+    boxSizeH = sampleSize[0]//gridSize[0]
+    boxSizeW = sampleSize[1]//gridSize[1]
+    averagePSLocal = np.zeros((gridSize[0], gridSize[1], boxSizeH, boxSizeW))
+
+    for i in range(images.shape[0]):
+        image = images[i]
+        imageSize = np.shape(image)
+        topLeftCorner = getSampleTopLeftCorner(
+            0, imageSize[0]-sampleSize[0], 0, imageSize[1]-sampleSize[1])
+        sample = getSampleImage(image, sampleSize, topLeftCorner)
+        for j in range(gridSize[0]):
+            for k in range(gridSize[1]):
+                patch = sample[j*boxSizeH: (j+1) * boxSizeH,
+                               boxSizeW*k:boxSizeW*(k+1)]
+                averagePSLocal[j, k, :, :] += getSamplePS(patch)
+
+    averagePSLocal /= images.shape[0]
+
+    dataSet.close()
+    for i in range(averagePSLocal.shape[0]):
+        for j in range(averagePSLocal.shape[1]):
+            averagePSLocal[i][j] = np.fft.fftshift(averagePSLocal[i][j])
+
+    return averagePSLocal
 
 
 def makeAveragePSFigure(averagePS, figureFileName):
@@ -120,12 +161,13 @@ def makeAveragePSFigure(averagePS, figureFileName):
         averagePSLocal (numpy.array): the average power spectrum in an array of shape [sampleShape[0],sampleShape[1]
         figureFileName (str): absolute path where the figure will be saved
     """
-    pylab.imshow(np.log(averagePS),cmap = "gray")
+    pylab.imshow(np.log(averagePS), cmap="gray")
     pylab.contour(np.log(averagePS))
     pylab.axis("off")
     pylab.savefig(figureFileName)
 
-def makeAveragePSRadialFigure(radialFreq,averagePSRadial,figureFileName):
+
+def makeAveragePSRadialFigure(radialFreq, averagePSRadial, figureFileName):
     """ Function that makes and save the figure with the power spectrum
     Args:
         averagePS (numpy.array) : the average power spectrum
@@ -133,13 +175,13 @@ def makeAveragePSRadialFigure(radialFreq,averagePSRadial,figureFileName):
         figureFileName (str): absolute path where the figure will be saved
     """
     pylab.figure()
-    pylab.loglog(radialFreq,averagePSRadial,'.')
+    pylab.loglog(radialFreq, averagePSRadial, '.')
     pylab.xlabel("Frequecy")
     pylab.ylabel("Radial Power Spectrum")
     pylab.savefig(figureFileName)
 
 
-def makeAveragePSLocalFigure(averagePSLocal,figureFileName,gridSize):
+def makeAveragePSLocalFigure(averagePSLocal, figureFileName, gridSize):
     """ Function that makes and save the figure with the local power spectrum
     Args:
         averagePSLocal (numpy.array): the average power spectrum in an array of shape [gridSize[0],gridSize[1],sampleShape[0],sampleShape[1]
@@ -149,9 +191,9 @@ def makeAveragePSLocalFigure(averagePSLocal,figureFileName,gridSize):
     pylab.figure()
     for i in range(gridSize[0]):
         for j in range(gridSize[1]):
-            pylab.subplot(gridSize[0],gridSize[1],i*gridSize[1]+j+1)
-            pylab.imshow(np.log(averagePSLocal[i,j]),cmap = "gray")
-            pylab.contour(np.log(averagePSLocal[i,j]))
+            pylab.subplot(gridSize[0], gridSize[1], i*gridSize[1]+j+1)
+            pylab.imshow(np.log(averagePSLocal[i, j]), cmap="gray")
+            pylab.contour(np.log(averagePSLocal[i, j]))
             pylab.axis("off")
     pylab.savefig(figureFileName)
 

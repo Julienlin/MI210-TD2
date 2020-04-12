@@ -1,6 +1,12 @@
 import numpy as np
 import pylab
 from sklearn.decomposition import FastICA
+import h5py
+import PSpy
+import matplotlib.pyplot as plt
+
+
+
 
 
 
@@ -14,8 +20,18 @@ def getICAInputData(inputFileName, sampleSize,nSamples):
     X(numpy.array)nSamples, sampleSize
     """
     #Write your function here
-    print("You should define the function getICAInputData")
-
+    dataSet = h5py.File(inputFileName, 'r')
+    images = dataSet.get('images')
+    #print("shape : ",images.shape)
+    X=np.zeros((nSamples,sampleSize[0],sampleSize[1]))
+    for i in range (nSamples):
+        image_number=np.random.randint(images.shape[0] ) #random image from the dataset
+        image=images[image_number]
+        position=PSpy.getSampleTopLeftCorner(0,image.shape[0]-sampleSize[0],0,image.shape[1]-sampleSize[1]) #random position in the topleftcorner to be sure to have a complete image 
+        sample=PSpy.getSampleImage(image,sampleSize,position)
+        X[i]=sample
+    #print("x",X.shape)
+    return X
 
 def preprocess(X):
     """Function that preprocess the data to be fed to the ICA algorithm
@@ -24,8 +40,13 @@ def preprocess(X):
     Returns:
     X(numpy.array)
     """
-    #Write your function here
-    print("You should define the function preprocess")
+    
+    if X.ndim>2:
+            X=np.reshape(X,(X.shape[0],X.shape[2]*X.shape[1]))
+    for i in range(X.shape[0]):
+        X[i]=X[i]-np.mean(X[i])
+
+    return X 
 
 
 def getIC(X):
@@ -35,8 +56,13 @@ def getIC(X):
     Returns:
     S(numpy.array) the matrix of the independent sources of the data
     """
-    #Write your function here
-    print("You should define the function getIC")
+    ICA = FastICA(algorithm='parallel', whiten=True,max_iter=10000,tol=0.1)
+    ICA.fit(X)
+    S = ICA.components_
+    #S1=ICA.fit_transform(X)
+    #print(S.shape)
+    return S 
+   
 
 def estimateSources(W,X):
     """Function that estimates the independent sources of the data
@@ -46,8 +72,10 @@ def estimateSources(W,X):
     Returns:
     S(numpy.array) the matrix of the sources of X
     """
-    #Write your function here
-    print("You should define the function estimateSources")
+    #S=np.dot(W.T,X)
+    #print(S.shape)
+    print("You should define the functione stimateSourcesKurtosis")
+
 
 
 def estimateSourcesKurtosis(S):
@@ -64,11 +92,13 @@ def makeKurtosisFigure(S,figureFileName):
     #Write your function here
     print("You should define the functione makeKurtosisFigure")
         
-def makeIdependentComponentsFigure(W, sampleSize,figureFileName): 
+
+       
+def makeIdependentComponentsFigure(W, sampleSize, figureFileName):
     W = W.reshape([-1,]+sampleSize)
     pylab.figure()
     for i in range(W.shape[0]):
-        pylab.subplot(sampleSize[0],sampleSize[1],i+1)
-        pylab.imshow(W[i],cmap = 'gray')
+        pylab.subplot(sampleSize[0], sampleSize[1], i+1)
+        pylab.imshow(W[i], cmap='gray')
         pylab.axis("off")
     pylab.savefig(figureFileName)

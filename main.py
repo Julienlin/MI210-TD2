@@ -4,6 +4,8 @@ import ICApy
 import numpy as np
 import os
 
+
+
 # defining read and write directories
 
 
@@ -84,16 +86,15 @@ PSpy.makeAveragePSLocalFigure(
 
 # Question 6
 
+X = ICApy.getICAInputData(inputFileName, sampleSizeICA, numberOfSamplesICA)
+X = ICApy.preprocess(X);
+W = ICApy.getIC(X)  #the matrix of the independent components
+PSpy.saveH5(ICResultsFileName,'IC',W)
+ICApy.makeIdependentComponentsFigure(W,sampleSizeICA, ICFigureFileName)
 
-#X = ICApy.getICAInputData(inputFileName, sampleSizeICA, numberOfSamplesICA)
-#X = ICApy.preprocess(X);
-#W = ICApy.getIC(X)
-
-# PSpy.saveH5(ICResultsFileName,'IC',W)
-#ICApy.makeIdependentComponentsFigure(W,sampleSizeICA, ICFigureFileName)
-
-# Question 7
+ # Question 7
 #A = ICApy.estimateActivations(W)
+#A=ICApy.estimateSources(W)
 #sparsenessMeasure = ICApy.estimateSparseness(A)
-# PSpy.saveH5(ICAActivationsResultsFileName,'A',A)
+#PSpy.saveH5(ICAActivationsResultsFileName,'A',A)
 #ICApy.makeSparsenessMeasureFigure(A, ICAActivationsSparsenessFigureFileName)

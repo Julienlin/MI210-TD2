@@ -4,6 +4,7 @@ import ICApy
 import numpy as np
 import os
 
+
 # defining read and write directories
 
 
@@ -73,27 +74,34 @@ PSpy.makeAveragePSLocalFigure(
 averagePS = PSpy.readH5(averagePSResultsFileName, 'averagePS')
 
 maxPS = np.max(averagePS)
-noiseVarianceList = [maxPS*10**(-9), maxPS*10**(-8), maxPS*10**(-7), maxPS*10**(-6)]  # if you do not see anything interesting you can change this values
+# if you do not see anything interesting you can change this values
+noiseVarianceList = [maxPS*10**(-9), maxPS*10 **
+                     (-8), maxPS*10**(-7), maxPS*10**(-6)]
 
 whiteningFilters = []
 for noiseVariance in noiseVarianceList:
-   whiteningFilters.append(WhiteningFilterspy.getPowerSpectrumWhiteningFilter(averagePS,noiseVariance))
+    whiteningFilters.append(
+        WhiteningFilterspy.getPowerSpectrumWhiteningFilter(averagePS, noiseVariance))
 
-PSpy.saveH5(whiteningFiltersResultsFileName, 'whiteningFilters', np.array(whiteningFilters))
-WhiteningFilterspy.makeWhiteningFiltersFigure(whiteningFilters, whiteningFiltersFigureFileName)
+PSpy.saveH5(whiteningFiltersResultsFileName,
+            'whiteningFilters', np.array(whiteningFilters))
+WhiteningFilterspy.makeWhiteningFiltersFigure(
+    whiteningFilters, whiteningFiltersFigureFileName)
 
 # Question 6
 
-
-#X = ICApy.getICAInputData(inputFileName, sampleSizeICA, numberOfSamplesICA)
-#X = ICApy.preprocess(X);
-#W = ICApy.getIC(X)
-
-# PSpy.saveH5(ICResultsFileName,'IC',W)
-#ICApy.makeIdependentComponentsFigure(W,sampleSizeICA, ICFigureFileName)
+X = ICApy.getICAInputData(inputFileName, sampleSizeICA, numberOfSamplesICA)
+X = ICApy.preprocess(X)
+W = ICApy.getIC(X)  # the matrix of the independent components
+PSpy.saveH5(ICResultsFileName, 'IC', W)
+ICApy.makeIdependentComponentsFigure(W, sampleSizeICA, ICFigureFileName)
 
 # Question 7
-#A = ICApy.estimateActivations(W)
+# A = ICApy.estimateActivations(W)
+A = ICApy.estimateSources(W, X)
 #sparsenessMeasure = ICApy.estimateSparseness(A)
-# PSpy.saveH5(ICAActivationsResultsFileName,'A',A)
-#ICApy.makeSparsenessMeasureFigure(A, ICAActivationsSparsenessFigureFileName)
+sparsenessMeasure = ICApy.estimateSourcesKurtosis(W*X.T)
+PSpy.saveH5(ICAActivationsResultsFileName, 'A', A)
+ICApy.makeKurtosisFigure(A, ICAActivationsSparsenessFigureFileName)
+ICApy.makeIdependentComponentsFigure(
+    W, sampleSizeICA, os.path.join(os.getcwd(), "Results", "ICA"))

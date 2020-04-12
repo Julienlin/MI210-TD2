@@ -11,8 +11,13 @@ def truncateNonNeg(x):
     Returns:
     y(numpy.array): array with positive or zero numbers
     """
-    #Write your function here
-    print("You should define the function truncateNonNeg")
+    y = np.real(x)
+    arraySize = np.shape(y)
+    for i in range(arraySize[0]):
+        for j in range(arraySize[1]):
+            if y[i][j]<0:
+                y[i][j]=0.0
+    return y
 
 def getPowerSpectrumWhiteningFilter(averagePS,noiseVariance):
     """Function that estimates the whitening and denoising power spectrum filter
@@ -22,9 +27,20 @@ def getPowerSpectrumWhiteningFilter(averagePS,noiseVariance):
     Returns:
     w(numpy.array): whitening denoising filter
     """
-    #Write your function here
-    print("You should define the function getPowerSpectrumWhiteningFilter")
+    arraySize = np.shape(averagePS)
+    temp = np.zeros(arraySize)
+    M= arraySize[0]*arraySize[1] #total number of pixels
+    for i in range(arraySize[0]):
+        for j in range(arraySize[1]):
+            temp[i][j] = ((1/np.sqrt(averagePS[i][j]))*((averagePS[i][j]-M*noiseVariance)/averagePS[i][j]))
 
+    w = truncateNonNeg(temp)
+    w = np.fft.ifftshift(w)
+    w = np.fft.ifft2(w)
+    w = truncateNonNeg(w)
+    w = np.fft.ifftshift(w)
+
+    return w
 
 def makeWhiteningFiltersFigure(whiteningFilters,figureFileName):
     pylab.figure()

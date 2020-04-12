@@ -72,17 +72,17 @@ PSpy.makeAveragePSLocalFigure(
     averagePSLocal, averagePSLocalFigureFileName, gridSize)
 
 # Question 5
-#averagePS = PSpy.readH5(averagePSResultsFileName,'averagePS')
+averagePS = PSpy.readH5(averagePSResultsFileName,'averagePS')
 
-#maxPS = np.max(averagePS);
-# noiseVarianceList = [maxPS*10**(-9),maxPS*10**(-8),maxPS*10**(-7),maxPS*10**(-6)] #if you do not see anything interesting you can change this values
+maxPS = np.max(averagePS);
+noiseVarianceList = [maxPS*10**(-9),maxPS*10**(-8),maxPS*10**(-7),maxPS*10**(-6)] #if you do not see anything interesting you can change this values
 
-#whiteningFilters = [];
-# for noiseVariance in noiseVarianceList:
-#    whiteningFilters.append(WhiteningFilterspy.getPowerSpectrumWhiteningFilter(averagePS,noiseVariance))
+whiteningFilters = [];
+for noiseVariance in noiseVarianceList:
+   whiteningFilters.append(WhiteningFilterspy.getPowerSpectrumWhiteningFilter(averagePS,noiseVariance))
 
-# PSpy.saveH5(whiteningFiltersResultsFileName,'whiteningFilters',np.array(whiteningFilters))
-# WhiteningFilterspy.makeWhiteningFiltersFigure(whiteningFilters,whiteningFiltersFigureFileName)
+PSpy.saveH5(whiteningFiltersResultsFileName,'whiteningFilters',np.array(whiteningFilters))
+WhiteningFilterspy.makeWhiteningFiltersFigure(whiteningFilters,whiteningFiltersFigureFileName)
 
 # Question 6
 

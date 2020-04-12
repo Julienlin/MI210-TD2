@@ -7,7 +7,7 @@
 ### Installation of dependencies
 
 ```sh
-pipenv install
+pipenv install --skip-lock
 ```
 
 ### Running scripts

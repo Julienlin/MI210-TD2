@@ -45,8 +45,8 @@ def getSamplePS(sample):
         samplePS (numpy.array): power spectrum of the sample. The axis are shifted such the low frequencies are in the center of the array (see scipy.ffpack.fftshift)
     """
 
-    samplePS = np.abs(np.fft.fft(sample))**2
-    np.fft.fftshift(samplePS)
+    samplePS = np.abs(np.fft.fft2(sample))**2
+    samplePS = np.fft.fftshift(samplePS)
     return samplePS
 
 
@@ -76,8 +76,7 @@ def getAveragePS(inputFileName, sampleSize, numberOfSamples):
                     samplePS[j][k]/numberOfSamples
 
     dataSet.close()
-    averagePS = np.fft.fftshift(averagePS)
-
+    
     return averagePS
 
 
@@ -148,9 +147,6 @@ def getAveragePSLocal(inputFileName, sampleSize, gridSize):
     averagePSLocal /= images.shape[0]
 
     dataSet.close()
-    for i in range(averagePSLocal.shape[0]):
-        for j in range(averagePSLocal.shape[1]):
-            averagePSLocal[i][j] = np.fft.fftshift(averagePSLocal[i][j])
 
     return averagePSLocal
 

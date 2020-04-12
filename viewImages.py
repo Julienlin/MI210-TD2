@@ -6,18 +6,19 @@ import pylab
 import os
 import h5py
 
-# Defining some parameters
-sampleSizePS = [32, 32]  # image sample size for the power spectrum
-gridSize = [3, 3]
-numberOfSamplesPS = 608  # number of samples from the dataset for estimating PS
-inputFileName = os.path.join(os.getcwd(), "airportSurveillance.hdf5")
-resultsDirectory = os.path.join(os.getcwd(), "images")
 
-dataset = h5py.File(inputFileName, 'r')
-images = dataset.get('images')
+if __name__ == "__main__":
+    # Defining some parameters
+    sampleSizePS = [32, 32]  # image sample size for the power spectrum
+    gridSize = [3, 3]
+    numberOfSamplesPS = 1  # number of samples from the dataset for estimating PS
+    inputFileName = os.path.join(os.getcwd(), "airportSurveillance.hdf5")
+    resultsDirectory = os.path.join(os.getcwd(), "imagesbis")
 
-for i in range(608):
-    pylab.imshow(images[i], cmap="gray")
-    # pylab.contour(image)
-    pylab.axis("off")
-    pylab.savefig(os.path.join(resultsDirectory, "image"+str(i)))
+    dataset = h5py.File(inputFileName, 'r')
+    images = dataset.get('images')
+
+    for i in range(numberOfSamplesPS):
+        pylab.imshow(images[i], cmap="gray")
+        pylab.axis("off")
+        pylab.savefig(os.path.join(resultsDirectory, "image"+str(i)))
